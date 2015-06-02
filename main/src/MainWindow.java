@@ -15,6 +15,7 @@ public class MainWindow extends JFrame {
     private JList mList;
     private JTextArea mTextArea;
     private JTextField mSearchField;
+    Finder f = new Finder("info");
 
     public MainWindow() {
         setTitle("Справочник по странам");
@@ -26,9 +27,11 @@ public class MainWindow extends JFrame {
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setLayout(new BorderLayout());
 
-
         //здесь должен быть метод, который получает названия стран по названию файлов в директории
-        String[] data = {"example1", "example2", "example3"};
+        // String[] data = {"example1", "example2", "example3"};
+
+        String[] data = f.makeCountryList();
+
         mList = new JList(data); //data has type Object[]
         mList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         mList.setLayoutOrientation(JList.VERTICAL_WRAP);
@@ -66,6 +69,9 @@ public class MainWindow extends JFrame {
 
             private void searchCountries() {
                 //здесь обновляется список стран в листе
+                String[] findText = f.makeCountryList(mSearchField.getText());
+                mList.removeAll();
+                mList.setListData(findText);
             }
         });
 
