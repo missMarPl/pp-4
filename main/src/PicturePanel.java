@@ -68,7 +68,7 @@ public class PicturePanel extends javax.swing.JPanel {
             System.err.println("????????? ????????? ????????!");
             ex.printStackTrace();
         }
-        revalidate();
+        invalidate();
         repaint();
     }
 }
