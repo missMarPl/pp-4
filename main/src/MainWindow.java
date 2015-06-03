@@ -8,6 +8,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class MainWindow extends JFrame {
 
@@ -15,7 +20,44 @@ public class MainWindow extends JFrame {
     private JList mList;
     private JTextArea mTextArea;
     private JTextField mSearchField;
+    private JScrollPane mScrollerPane;
     Finder f = new Finder("info");
+
+    public void showInfo(String country)
+    {
+        mTextArea.setText(null);
+        BufferedReader reader = null;
+        try
+        {
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream("info/" + country + "/info.txt"), StandardCharsets.UTF_8));
+            boolean b = true;
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                if (b)
+                    b = false;
+                else
+                    mTextArea.append("\n");
+                mTextArea.append(line);
+            }
+        }
+        catch (IOException exp)
+        {
+            exp.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (reader != null)
+                    reader.close();
+            }
+            catch (IOException exp)
+            {
+                exp.printStackTrace();
+            }
+        }
+    }
 
     public MainWindow() {
         setTitle("Справочник по странам");
@@ -33,7 +75,7 @@ public class MainWindow extends JFrame {
         String[] data = f.makeCountryList();
 
         mList = new JList(data); //data has type Object[]
-        mList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        mList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         mList.setLayoutOrientation(JList.VERTICAL_WRAP);
         mList.setVisibleRowCount(-1);
 
@@ -42,10 +84,11 @@ public class MainWindow extends JFrame {
 
         mList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
-                if (evt.getValueIsAdjusting() || (evt.getLastIndex() - evt.getFirstIndex() != 1))
+                if (evt.getValueIsAdjusting())
                     return;
 
-                //здесь поиск описания страны
+                mPicture.setImageFile(new java.io.File("info/" + mList.getSelectedValue().toString() + "/flag.bmp"));
+                showInfo(mList.getSelectedValue().toString());
 
             }
         });
@@ -88,16 +131,17 @@ public class MainWindow extends JFrame {
         mTextArea.setRows(5);
         mTextArea.setWrapStyleWord(true);
 
-        JScrollPane descriptionScroller = new JScrollPane(mTextArea);
-        descriptionScroller.setPreferredSize(new Dimension(450, 260));
+        mScrollerPane = new JScrollPane(mTextArea);
+        mScrollerPane.setPreferredSize(new Dimension(450, 260));
+        showInfo(data[0]);
 
         mPicture = new PicturePanel();
         mPicture.setLayout(new java.awt.BorderLayout());
         mPicture.setPreferredSize(new Dimension(200, 200));
-        mPicture.setImageFile(new java.io.File("info/Афганистан/flag.bmp"));
+        mPicture.setImageFile(new java.io.File("info/" + data[0] + "/flag.bmp"));
 
         descriptionPanel.add(BorderLayout.NORTH, mPicture);
-        descriptionPanel.add(BorderLayout.SOUTH,descriptionScroller);
+        descriptionPanel.add(BorderLayout.SOUTH, mScrollerPane);
 
         getContentPane().add(BorderLayout.WEST, listPanel);
         getContentPane().add(BorderLayout.EAST, descriptionPanel);
