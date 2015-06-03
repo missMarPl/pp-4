@@ -1,5 +1,5 @@
 /**
- * Created by Весёлый студент on 20.05.2015.
+ * Created by Р’РµСЃС‘Р»С‹Р№ СЃС‚СѓРґРµРЅС‚ on 20.05.2015.
  */
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -60,7 +60,7 @@ public class MainWindow extends JFrame {
     }
 
     public MainWindow() {
-        setTitle("Справочник по странам");
+        setTitle("РЎРїСЂР°РІРѕС‡РЅРёРє РїРѕ СЃС‚СЂР°РЅР°Рј");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel listPanel = new JPanel();
@@ -69,7 +69,7 @@ public class MainWindow extends JFrame {
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setLayout(new BorderLayout());
 
-        //здесь должен быть метод, который получает названия стран по названию файлов в директории
+        //Р·РґРµСЃСЊ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РјРµС‚РѕРґ, РєРѕС‚РѕСЂС‹Р№ РїРѕР»СѓС‡Р°РµС‚ РЅР°Р·РІР°РЅРёСЏ СЃС‚СЂР°РЅ РїРѕ РЅР°Р·РІР°РЅРёСЋ С„Р°Р№Р»РѕРІ РІ РґРёСЂРµРєС‚РѕСЂРёРё
         // String[] data = {"example1", "example2", "example3"};
 
         String[] data = f.makeCountryList();
@@ -111,7 +111,7 @@ public class MainWindow extends JFrame {
             }
 
             private void searchCountries() {
-                //здесь обновляется список стран в листе
+                //Р·РґРµСЃСЊ РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ СЃРїРёСЃРѕРє СЃС‚СЂР°РЅ РІ Р»РёСЃС‚Рµ
                 String[] findText = f.makeCountryList(mSearchField.getText());
                 mList.removeAll();
                 mList.setListData(findText);
